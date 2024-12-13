@@ -11,3 +11,6 @@
 docker build -t <IMAGE_NAME:IMAGE_TAG> -f dockerfile .
 docker push <IMAGE_NAME:IMAGE_TAG>
 ```
+
+## Further Steps
+Please go into `apisix` or `nginx` path for further steps.
