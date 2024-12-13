@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: simple-fastapi-secret-key1
+data:
+  key: YWFhYmJiY2Nj  # aaabbbccc
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: simple-fastapi-secret-key2
+data:
+  key: eHh4eXl5enp6  # xxxyyyzzz
+
+---
+
+apiVersion: apisix.apache.org/v2
+kind: ApisixConsumer
+metadata:
+  name: simple-fastapi-apisix-consumer-key1
+spec:
+  authParameter:
+    keyAuth:
+      secretRef:
+        name: simple-fastapi-secret-key1
+
+---
+
+apiVersion: apisix.apache.org/v2
+kind: ApisixConsumer
+metadata:
+  name: simple-fastapi-apisix-consumer-key2
+spec:
+  authParameter:
+    keyAuth:
+      secretRef:
+        name: simple-fastapi-secret-key2
+
+---
+
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: simple-fastapi-apisix-route
+spec:
+  http:
+  - name: root
+    match:
+      hosts:
+      - localhost
+      paths:
+      - /*
+    backends:
+      - serviceName: simple-fastapi-service
+        servicePort: 80
+    authentication:
+      enable: true
+      type: keyAuth

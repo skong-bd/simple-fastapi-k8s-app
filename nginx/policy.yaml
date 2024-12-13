@@ -1,0 +1,33 @@
+apiVersion: k8s.nginx.org/v1
+kind: Policy
+metadata:
+  name: simple-fastapi-key-policy-1
+spec:
+  accessControl:
+    allow:
+    - 0.0.0.0/0
+
+---
+
+apiVersion: k8s.nginx.org/v1
+kind: Policy
+metadata:
+  name: simple-fastapi-key-policy-2
+spec:
+  rateLimit:
+    rate: 10r/s
+    zoneSize: 10M
+    key: ${binary_remote_addr}
+
+---
+
+apiVersion: k8s.nginx.org/v1
+kind: Policy
+metadata:
+  name: simple-fastapi-key-policy-3
+spec:
+  apiKey:
+    suppliedIn:
+      header:
+      - "X-API-KEY"
+    clientSecret: simple-fastapi-key-secret
